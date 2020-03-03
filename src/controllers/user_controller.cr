@@ -1,3 +1,5 @@
+require "../helpers/authy"
+
 class UserController < ApplicationController
   getter user = User.new
 
@@ -17,8 +19,11 @@ class UserController < ApplicationController
     render("edit.slang")
   end
 
+  def verify
+    render "verify.slang"
+  end
+
   def create
-    puts user_params.validate!
     user = User.new user_params.validate!
     pass = user_params.validate!["password"]
     phone = user_params.validate!["phone_number"]
@@ -26,10 +31,11 @@ class UserController < ApplicationController
     user.password = pass if pass
     user.phone_number = phone if phone
     user.country_code = country_code if country_code
+    user.authy_user_id = create_authy_user user_params["email"], user_params["phone_number"], user_params["country_code"]
 
     if user.save
       session[:user_id] = user.id
-      redirect_to "/", flash: {"success" => "Created User successfully."}
+      redirect_to "/verify"
     else
       flash[:danger] = "Could not create User!"
       render "new.slang"
@@ -37,7 +43,6 @@ class UserController < ApplicationController
   end
 
   def update
-    user.set_attributes user_params.validate!
     if user.save
       redirect_to "/", flash: {"success" => "User has been updated."}
     else

@@ -8,10 +8,9 @@ class User < Granite::Base
   column id : Int64, primary: true
   column email : String?
   column hashed_password : String?
-  phone_number : String
-  country_code : String
-  phone_number_confirmed : Bool = false
-  authy_user_id : String?
+  column phone_number : String
+  column country_code : String
+  column authy_user_id : String?
   timestamps
 
   validate :email, "is required", ->(user : User) do
@@ -25,20 +24,6 @@ class User < Granite::Base
 
   validate :password, "is too short", ->(user : User) do
     user.password_changed? ? user.valid_password_size? : true
-  end
-
-  def phone_number=(@phone_number : String)
-  end
-
-  def phone_number
-    @phone_number
-  end
-
-  def country_code=(@country_code : String)
-  end
-
-  def country_code
-    @country_code
   end
 
   def password=(password)
