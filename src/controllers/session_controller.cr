@@ -14,7 +14,7 @@ class SessionController < ApplicationController
       send_OTP user.authy_user_id
       redirect_to "/verify"
     else
-      flash[:danger] = "Invalid email or password!"
+      flash[:danger] = "Invalid email or password"
       user = User.new
       render("new.slang")
     end

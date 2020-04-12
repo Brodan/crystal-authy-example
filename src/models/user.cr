@@ -8,8 +8,8 @@ class User < Granite::Base
   column id : Int64, primary: true
   column email : String?
   column hashed_password : String?
-  column phone_number : String
-  column country_code : String
+  column phone_number : String?
+  column country_code : String?
   column authy_user_id : String?
   timestamps
 

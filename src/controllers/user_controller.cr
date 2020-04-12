@@ -43,6 +43,7 @@ class UserController < ApplicationController
   end
 
   def update
+    user.set_attributes user_params.validate!
     if user.save
       redirect_to "/", flash: {"success" => "User has been updated."}
     else
