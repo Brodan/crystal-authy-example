@@ -26,16 +26,22 @@ class UserController < ApplicationController
   def create
     user = User.new user_params.validate!
     pass = user_params.validate!["password"]
-    phone = user_params.validate!["phone_number"]
-    country_code = user_params.validate!["country_code"]
+    phone = user_params[:phone_number]
+    country_code = user_params[:country_code]
     user.password = pass if pass
     user.phone_number = phone if phone
     user.country_code = country_code if country_code
-    user.authy_user_id = create_authy_user user_params["email"], user_params["phone_number"], user_params["country_code"]
 
     if user.save
-      session[:user_id] = user.id
-      redirect_to "/verify"
+      if phone.empty? || country_code.empty?
+        session[:user_id] = user.id
+        redirect_to "/"
+      else
+        user.authy_user_id = create_authy_user user_params["email"], phone, country_code
+        session[:tmp_user_id] = user.id
+        redirect_to "/verify"
+      end
+
     else
       flash[:danger] = "Could not create User!"
       render "new.slang"
@@ -61,8 +67,8 @@ class UserController < ApplicationController
     params.validation do
       required :email
       optional :password
-      required :phone_number
-      required :country_code
+      optional :phone_number
+      optional :country_code
     end
   end
 
