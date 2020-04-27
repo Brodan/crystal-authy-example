@@ -9,8 +9,7 @@ class SessionController < ApplicationController
   def create
     user = User.find_by(email: params["email"].to_s)
     if user && user.authenticate(params["password"].to_s)
-
-      if user.phone_number.nil? && user.country_code.nil?
+      if user.phone_number.nil? || user.country_code.nil?
         session[:user_id] = user.id
         session[:is_verified] = false
         redirect_to "/"
@@ -19,7 +18,6 @@ class SessionController < ApplicationController
         send_OTP user.authy_user_id
         redirect_to "/verify"
       end
-
     else
       flash[:danger] = "Invalid email or password"
       user = User.new
