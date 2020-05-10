@@ -3,6 +3,7 @@
 [![Amber Framework](https://img.shields.io/badge/using-amber_framework-orange.svg)](https://amberframework.org)
 
 This is a project written using [Amber](https://amberframework.org). This project is an example of a two-factor authentication (2FA) implementation using Twilio's [Authy](https://authy.com/). Enjoy!
+See the full blog post about building this application [here](https://www.twilio.com/blog/2fa-authy-crystal-amber).
 
 ## Getting Started
 
